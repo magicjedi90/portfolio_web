@@ -2,11 +2,15 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import React from "react";
+import QBem from 'qbem';
+import styles from './layout.module.css';
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
+
+const bem = new QBem('layout');
 
 export const metadata: Metadata = {
   title: "Portfolio | Principal Engineer",
@@ -22,8 +26,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-          {children}
+        <div className={styles[bem.block()]}>
+          <div className={styles[bem.elem('content')]}>
+            {children}
+          </div>
         </div>
       </body>
     </html>
