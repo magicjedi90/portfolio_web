@@ -2,7 +2,7 @@ import apiClient from '@/lib/api-client';
 import { Project } from '@/types/project';
 
 export const ProjectService = {
-    getProjectById: async (id: string): Promise<Project> => {
+    getProjectById: async (id: number): Promise<Project> => {
         const response = await apiClient.get<Project>(`/projects/${id}`);
         return response.data;
     },

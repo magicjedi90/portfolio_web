@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import { ProjectService } from '@/services/project-service';
 import { Project } from '@/types/project';
 
-export const useProject = (id: string) => {
+export const useProject = (id: number) => {
     const { data, error, isLoading } = useSWR<Project>(
         `/projects/${id}`,
         () => ProjectService.getProjectById(id)
