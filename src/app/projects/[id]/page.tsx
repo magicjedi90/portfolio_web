@@ -1,4 +1,3 @@
-import { ProjectService } from '@/services/project-service';
 import Project from "@/components/Project";
 import { Suspense } from 'react';
 
