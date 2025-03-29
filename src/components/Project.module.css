@@ -1,0 +1,55 @@
+.project {
+    @apply p-6 bg-white rounded-lg shadow-md;
+}
+
+.project__title {
+    @apply text-2xl font-bold mb-4;
+}
+
+.project__title--primary {
+    @apply text-gray-900;
+}
+
+.project__metrics {
+    @apply mb-4;
+}
+
+.project__metrics--primary {
+    @apply text-gray-600;
+}
+
+.project__metric {
+    @apply text-sm;
+}
+
+.project__metric--primary {
+    @apply text-gray-600;
+}
+
+.project__description {
+    @apply text-gray-600 mb-6;
+}
+
+.project__skills-title {
+    @apply text-xl font-semibold mb-3;
+}
+
+.project__skills-list {
+    @apply list-disc list-inside;
+}
+
+.project__skill-item {
+    @apply text-gray-600 mb-1;
+}
+
+.project__loading {
+    @apply text-center py-4 text-gray-600;
+}
+
+.project__error {
+    @apply text-center py-4 text-red-600;
+}
+
+.project__not-found {
+    @apply text-center py-4 text-gray-600;
+} 

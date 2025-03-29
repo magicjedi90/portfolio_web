@@ -1,4 +1,6 @@
-import useSWR from 'swr';
+'use client';
+
+import useSWR from 'swr/immutable';
 import { ProjectService } from '@/services/project-service';
 import { Project } from '@/types/project';
 

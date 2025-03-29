@@ -1,0 +1,15 @@
+.projects-page {
+    @apply container mx-auto px-4 py-8;
+}
+
+.projects-page__title {
+    @apply text-3xl font-bold mb-8;
+}
+
+.projects-page__title--primary {
+    @apply text-gray-900;
+}
+
+.projects-page__content {
+    @apply mt-8;
+} 
