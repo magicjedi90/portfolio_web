@@ -1,7 +1,7 @@
 'use client';
 
-import { useProject } from "@/hooks/useProject";
-import {Skill} from "@/types/skill";
+import { useProject } from "@/api/hooks";
+import type { Skill } from "@/api/types";
 import QBem from 'qbem';
 import styles from './Project.module.css';
 
@@ -9,10 +9,12 @@ const bem = new QBem('project');
 
 export default function Project({ id }: { id: number }) {
     const { project, isLoading, isError } = useProject(id);
+    
+    console.log('Project component state:', { project, isLoading, isError });
 
     if (isLoading) return <div className={styles[bem.elem('loading')]}>Loading...</div>;
-    if (isError) return <div className={styles[bem.elem('error')]}>Error loading project</div>;
     if (!project) return <div className={styles[bem.elem('not-found')]}>Project not found</div>;
+    if (isError) return <div className={styles[bem.elem('error')]}>Error loading project</div>;
 
     return (
         <div className={styles[bem.block()]}>

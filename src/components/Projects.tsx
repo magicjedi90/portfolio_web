@@ -1,4 +1,4 @@
-import {useProjects} from "@/hooks/useProjects";
+import {useProjects} from "@/api/hooks";
 import Project from "./Project";
 
 export default function Projects() {

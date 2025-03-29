@@ -1,5 +1,5 @@
 import apiClient from '@/lib/api-client';
-import { Project } from '@/types/project';
+import type { Project } from '@/api/types';
 import { AxiosResponse } from 'axios';
 
 export const ProjectService = {
