@@ -1,23 +1,34 @@
-import Project from "@/components/Project";
-import { Suspense } from 'react';
+'use client';
 
-export default async function ProjectPage({ 
+import { useProject } from "@/api/hooks";
+import ProjectCard from "@/components/Project";
+import QBem from 'qbem';
+import styles from './page.module.css';
+
+const bem = new QBem('project-page');
+
+export default function ProjectPage({ 
     params 
 }: { 
-    params: Promise<{ id: string }> 
+    params: { id: string } 
 }) {
-    const resolvedParams = await params;
-    const id = Number(resolvedParams.id);
+    const id = Number(params.id);
     
     if (isNaN(id)) {
         return <div>Invalid project ID</div>;
     }
 
+    const { project, isLoading, isError } = useProject(id);
+
+    if (isLoading) return <div>Loading...</div>;
+    if (isError) return <div>Error loading project</div>;
+    if (!project) return <div>Project not found</div>;
+
     return (
-        <div>
-            <Suspense fallback={<div>Loading...</div>}>
-                <Project id={id} />
-            </Suspense>
+        <div className={bem.block()}>
+            <div className={bem.elem('content')}>
+                <ProjectCard project={project} />
+            </div>
         </div>
     );
 }
