@@ -3,7 +3,7 @@ import { ProjectService } from '@/services/project-service';
 import { Project } from '@/types/project';
 
 export const useProjects = () => {
-    const { data, error, isLoading } = useSWR<Project>(
+    const { data, error, isLoading } = useSWR<Project[]>(
         `/projects`,
         () => ProjectService.getAllProjects()
     );

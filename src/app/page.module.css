@@ -166,3 +166,127 @@ a.secondary {
     filter: invert();
   }
 }
+
+.portfolio {
+  @apply min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 to-gray-800 text-white px-4;
+}
+
+.portfolio__hero-content {
+  @apply max-w-4xl mx-auto text-center space-y-8;
+}
+
+.portfolio__hero-title {
+  @apply text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500;
+}
+
+.portfolio__hero-subtitle {
+  @apply text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto;
+}
+
+.portfolio__hero-cta {
+  @apply flex gap-4 justify-center mt-8;
+}
+
+.portfolio__hero-button {
+  @apply px-6 py-3 rounded-lg font-semibold transition-all duration-200;
+}
+
+.portfolio__hero-button--primary {
+  @apply bg-blue-500 hover:bg-blue-600 text-white;
+}
+
+.portfolio__hero-button--secondary {
+  @apply bg-transparent border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white;
+}
+
+.portfolio--skills {
+  @apply py-20 bg-gray-800;
+}
+
+.portfolio__skills-grid {
+  @apply max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4;
+}
+
+.portfolio__skills-card {
+  @apply bg-gray-700 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200;
+}
+
+.portfolio__skills-title {
+  @apply text-2xl font-bold text-blue-400 mb-4;
+}
+
+.portfolio__skills-list {
+  @apply space-y-2 text-gray-300;
+}
+
+.portfolio__skills-item {
+  @apply flex items-center gap-2;
+}
+
+.portfolio__skills-icon {
+  @apply text-blue-400;
+}
+
+.portfolio--projects {
+  @apply py-20 bg-gray-900;
+}
+
+.portfolio__projects-grid {
+  @apply max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 px-4;
+}
+
+.portfolio__projects-card {
+  @apply bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-200;
+}
+
+.portfolio__projects-image {
+  @apply w-full h-48 object-cover;
+}
+
+.portfolio__projects-content {
+  @apply p-6;
+}
+
+.portfolio__projects-title {
+  @apply text-xl font-bold text-white mb-2;
+}
+
+.portfolio__projects-description {
+  @apply text-gray-300 mb-4;
+}
+
+.portfolio__projects-tags {
+  @apply flex flex-wrap gap-2 mb-4;
+}
+
+.portfolio__projects-tag {
+  @apply px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm;
+}
+
+.portfolio__projects-links {
+  @apply flex gap-4;
+}
+
+.portfolio__projects-link {
+  @apply text-blue-400 hover:text-blue-300 transition-colors duration-200;
+}
+
+.portfolio--contact {
+  @apply py-20 bg-gray-800;
+}
+
+.portfolio__contact-content {
+  @apply max-w-4xl mx-auto text-center px-4;
+}
+
+.portfolio__contact-title {
+  @apply text-3xl font-bold text-white mb-8;
+}
+
+.portfolio__contact-text {
+  @apply text-gray-300 mb-8;
+}
+
+.portfolio__contact-button {
+  @apply px-8 py-4 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-200;
+}
