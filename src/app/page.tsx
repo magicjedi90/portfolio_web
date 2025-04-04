@@ -1,6 +1,8 @@
 'use client';
 
-import { useJobs, useProjects, useSkills } from '@/api/hooks';
+import { useJobs, useProjects } from '@/api/hooks';
+import Jobs from '@/components/Jobs';
+import Projects from '@/components/Projects';
 import QBem from 'qbem';
 import styles from './page.module.css';
 
@@ -9,7 +11,6 @@ const bem = new QBem('home');
 export default function Home() {
     const { jobs, isLoading: isLoadingJobs, isError: isErrorJobs } = useJobs();
     const { projects, isLoading: isLoadingProjects, isError: isErrorProjects } = useProjects();
-    const { skills, isLoading: isLoadingSkills, isError: isErrorSkills } = useSkills();
 
     return (
         <div className={styles[bem.block()]}>
@@ -83,17 +84,7 @@ export default function Home() {
                     )}
 
                     {!isLoadingJobs && !isErrorJobs && jobs && (
-                        <div className={styles[bem.elem('jobs-grid')]}>
-                            {jobs.slice(0, 3).map((job) => (
-                                <div key={job.id} className={styles[bem.elem('job-card')]}>
-                                    <h3 className={styles[bem.elem('job-title')]}>{job.roles}</h3>
-                                    <p className={styles[bem.elem('job-company')]}>{job.company_name}</p>
-                                    <p className={styles[bem.elem('job-period')]}>
-                                        {job.start_date} - {job.end_date || 'Present'}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
+                        <Jobs jobs={jobs.slice(0, 3)} />
                     )}
                 </div>
             </section>
@@ -115,14 +106,7 @@ export default function Home() {
                     )}
 
                     {!isLoadingProjects && !isErrorProjects && projects && (
-                        <div className={styles[bem.elem('projects-grid')]}>
-                            {projects.slice(0, 3).map((project) => (
-                                <div key={project.id} className={styles[bem.elem('project-card')]}>
-                                    <h3 className={styles[bem.elem('project-title')]}>{project.name}</h3>
-                                    <p className={styles[bem.elem('project-description')]}>{project.description}</p>
-                                </div>
-                            ))}
-                        </div>
+                        <Projects projects={projects.slice(0, 3)} />
                     )}
                 </div>
             </section>
