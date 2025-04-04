@@ -1,5 +1,8 @@
-import type { Job } from "@/api/types";
-import JobCard from "./Job";
+import { Job } from '@/api/types';
+import QBem from 'qbem';
+import styles from './Jobs.module.css';
+
+const bem = new QBem('jobs');
 
 interface JobsProps {
     jobs: Job[];
@@ -7,10 +10,23 @@ interface JobsProps {
 
 export default function Jobs({ jobs }: JobsProps) {
     return (
-        <div className="prose py-12">
-            <h2>Work Experience</h2>
+        <div className={styles[bem.block()]}>
             {jobs.map((job) => (
-                <JobCard key={job.id} job={job}/>
+                <div key={job.id} className={styles[bem.elem('card')]}>
+                    <div className={styles[bem.elem('card-content')]}>
+                        <div className={styles[bem.elem('header')]}>
+                            <h3 className={styles[bem.elem('title')]}>{job.roles}</h3>
+                            <span className={styles[bem.elem('company')]}>{job.company_name}</span>
+                        </div>
+                        <div className={styles[bem.elem('period')]}>
+                            {job.start_date} - {job.end_date || 'Present'}
+                        </div>
+                        <p className={styles[bem.elem('description')]}>{job.description}</p>
+                        <div className={styles[bem.elem('responsibilities')]}>
+                            {job.responsibilities}
+                        </div>
+                    </div>
+                </div>
             ))}
         </div>
     );

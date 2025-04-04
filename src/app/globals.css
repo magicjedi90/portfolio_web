@@ -12,6 +12,9 @@
   --muted: #64748b;
   --border: #e2e8f0;
   --radius: 0.5rem;
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -33,6 +36,13 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgb(var(--background-end-rgb))
+      )
+      rgb(var(--background-start-rgb));
   }
 }
 
@@ -64,4 +74,49 @@
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-400 dark:bg-gray-500;
+}
+
+header {
+  background-color: theme('colors.gray.900');
+  border-bottom: 1px solid theme('colors.gray.800');
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+header .content {
+  max-width: theme('maxWidth.7xl');
+  margin: 0 auto;
+  padding: theme('spacing.4') theme('spacing.6');
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header .logo {
+  color: theme('colors.blue.400');
+  font-size: theme('fontSize.xl');
+  font-weight: theme('fontWeight.bold');
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+header .logo:hover {
+  color: theme('colors.blue.300');
+}
+
+header nav {
+  display: flex;
+  gap: theme('spacing.6');
+}
+
+header nav a {
+  color: theme('colors.gray.300');
+  text-decoration: none;
+  font-weight: theme('fontWeight.medium');
+  transition: color 0.2s;
+}
+
+header nav a:hover {
+  color: theme('colors.blue.400');
 }
