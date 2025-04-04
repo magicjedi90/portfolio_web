@@ -1,17 +1,40 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import QBem from 'qbem';
+import styles from './Header.module.css';
+
+const bem = new QBem('header');
 
 export default function Header() {
+    const pathname = usePathname();
+
     return (
-        <header>
-            <div className="content">
-                <Link href="/" className="logo">
-                    Portfolio
+        <header className={styles[bem.block()]}>
+            <div className={styles[bem.elem('content')]}>
+                <Link href="/" className={styles[bem.elem('logo')]}>
+                    Jesse McIntosh
                 </Link>
-                <nav>
-                    <Link href="/">Home</Link>
-                    <Link href="/experience">Experience</Link>
-                    <Link href="/projects">Projects</Link>
-                    <Link href="/skills">Skills</Link>
+                <nav className={styles[bem.elem('nav')]}>
+                    <Link
+                        href="/"
+                        className={`${styles[bem.elem('nav-link')]} ${pathname === '/' ? styles[bem.elem('nav-link', ['active'])] : ''}`}
+                    >
+                        Home
+                    </Link>
+                    <Link
+                        href="/experience"
+                        className={`${styles[bem.elem('nav-link')]} ${pathname === '/experience' ? styles[bem.elem('nav-link', ['active'])] : ''}`}
+                    >
+                        Experience
+                    </Link>
+                    <Link
+                        href="/projects"
+                        className={`${styles[bem.elem('nav-link')]} ${pathname === '/projects' ? styles[bem.elem('nav-link', ['active'])] : ''}`}
+                    >
+                        Projects
+                    </Link>
                 </nav>
             </div>
         </header>
