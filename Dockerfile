@@ -16,11 +16,9 @@ RUN npm cache clean --force && \
 # Copy the rest of the application
 COPY . .
 
-# Set Next.js to use standalone output
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
-
-# Build the application
+# Build the application with a placeholder API URL
+# This will be overridden by runtime environment variables
+ENV NEXT_PUBLIC_API_URL=http://localhost:8080
 RUN npm run build
 
 # Production stage
@@ -45,6 +43,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Expose the port the app runs on
 EXPOSE 3000
 
+# Use port 3000 for local development
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
