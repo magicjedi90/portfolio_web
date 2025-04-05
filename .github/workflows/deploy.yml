@@ -79,4 +79,9 @@ jobs:
           # Set CORS configuration
           echo '[{"origin": ["*"], "method": ["GET"], "responseHeader": ["Content-Type", "Cache-Control"], "maxAgeSeconds": 3600}]' > cors.json
           gsutil cors set cors.json gs://$FRONTEND_BUCKET
-          rm cors.json 
+          rm cors.json
+          
+          # Create a redirect for the root path
+          echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=/sindbad-portfolio-frontend-bucket/"></head></html>' > redirect.html
+          gsutil cp redirect.html gs://$FRONTEND_BUCKET/index.html
+          rm redirect.html 
