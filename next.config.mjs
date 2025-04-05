@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  output: 'export',
+  output: 'standalone',
   // Ensure environment variables are handled correctly
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL
@@ -11,8 +11,6 @@ const nextConfig = {
   ...(process.env.NODE_ENV === 'production' ? {
     // Ensure trailing slashes
     trailingSlash: true,
-    // Use static HTML export
-    distDir: 'out',
     // Disable image optimization
     images: {
       unoptimized: true

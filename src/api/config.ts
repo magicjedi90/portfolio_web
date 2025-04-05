@@ -5,20 +5,12 @@ console.log('API URL:', process.env.NEXT_PUBLIC_API_URL);
 
 // Create axios instance with default config
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') || 'http://localhost:8081', // Remove trailing slash
+    baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://portfolio-api-wrapper-14010903385.us-west1.run.app',
     headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
     },
-    // Add CORS headers for production
-    ...(process.env.NODE_ENV === 'production' ? {
-        withCredentials: false,
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-        }
-    } : {})
+    // Ensure credentials aren't sent
+    withCredentials: false
 });
 
 // Add interceptors for error handling

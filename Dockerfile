@@ -3,33 +3,32 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Install dependencies required for node-gyp
-RUN apk add --no-cache python3 make g++
-
 # Copy package files
 COPY package*.json ./
+RUN npm ci
 
-# Install dependencies with clean npm cache
-RUN npm cache clean --force && \
-    npm install
-
-# Copy the rest of the application
+# Copy source files
 COPY . .
 
-# Build the application
+# Build the app
+ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
 
-# Production stage
-FROM nginx:alpine
+# Production image
+FROM node:18-alpine AS runner
+WORKDIR /app
 
-# Copy built files from builder
-COPY --from=builder /app/out /usr/share/nginx/html
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy necessary files from builder
+COPY --from=builder /app/next.config.mjs ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
-# Expose port 80
-EXPOSE 80
+EXPOSE 3000
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"] 
+CMD ["node", "server.js"] 

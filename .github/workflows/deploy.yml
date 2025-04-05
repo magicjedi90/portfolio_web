@@ -1,11 +1,13 @@
-name: Deploy to Google Cloud Storage
+name: Deploy to Cloud Run
 
 on:
   push:
     branches: [ main ]
 
 env:
-  FRONTEND_BUCKET: sindbad-portfolio-frontend-bucket
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: us-central1
+  SERVICE_NAME: portfolio-web
 
 jobs:
   deploy:
@@ -17,51 +19,30 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-        env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-
-      - name: Authenticate to Google Cloud
+      - name: Google Auth
+        id: auth
         uses: google-github-actions/auth@v1
         with:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.GCP_SA_EMAIL }}
-          token_format: 'access_token'
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
-      - name: Upload files
-        run: |
-          # Clear existing files
-          gsutil -m rm -r gs://$FRONTEND_BUCKET/** || true
-          
-          # Upload all files
-          gsutil -m cp -r out/* gs://$FRONTEND_BUCKET/
-          
-          # Make bucket publicly readable
-          gsutil iam ch allUsers:objectViewer gs://$FRONTEND_BUCKET
-          
-          # Configure website with proper error handling
-          gsutil web set -m index.html -e 404.html gs://$FRONTEND_BUCKET
-          
-          # Set proper content types for all files
-          gsutil -m setmeta -h "Content-Type:text/html" gs://$FRONTEND_BUCKET/**/*.html
-          gsutil -m setmeta -h "Content-Type:text/css" gs://$FRONTEND_BUCKET/**/*.css
-          gsutil -m setmeta -h "Content-Type:application/javascript" gs://$FRONTEND_BUCKET/**/*.js
-          gsutil -m setmeta -h "Content-Type:image/svg+xml" gs://$FRONTEND_BUCKET/**/*.svg
-          gsutil -m setmeta -h "Content-Type:image/png" gs://$FRONTEND_BUCKET/**/*.png
-          gsutil -m setmeta -h "Content-Type:image/jpeg" gs://$FRONTEND_BUCKET/**/*.jpg
-          gsutil -m setmeta -h "Content-Type:image/jpeg" gs://$FRONTEND_BUCKET/**/*.jpeg
-          gsutil -m setmeta -h "Content-Type:image/gif" gs://$FRONTEND_BUCKET/**/*.gif
-          gsutil -m setmeta -h "Content-Type:font/woff2" gs://$FRONTEND_BUCKET/**/*.woff2
-          gsutil -m setmeta -h "Content-Type:font/woff" gs://$FRONTEND_BUCKET/**/*.woff 
+      - name: Authorize Docker push
+        run: gcloud auth configure-docker
+
+      - name: Build and Push Container
+        run: |-
+          docker build -t gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ github.sha }} .
+          docker push gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ github.sha }}
+
+      - name: Deploy to Cloud Run
+        run: |-
+          gcloud run deploy $SERVICE_NAME \
+            --region $REGION \
+            --image gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ github.sha }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --set-env-vars "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" \
+            --min-instances=1 
