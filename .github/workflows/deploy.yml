@@ -1,58 +1,50 @@
-name: Deploy Frontend
+name: Deploy to Google Cloud Storage
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
 
 env:
-  PROJECT_ID: wide-bivouac-453212-v8
-  REGION: us-west1
   FRONTEND_BUCKET: sindbad-portfolio-frontend-bucket
 
 jobs:
-  deploy-frontend:
-    name: Deploy Frontend
+  deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      id-token: write
+      contents: 'read'
+      id-token: 'write'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: '18'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build
+        run: npm run build
         env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.PROD_API_URL }}
-        run: |
-          echo "Building with API URL: $NEXT_PUBLIC_API_URL"
-          # Verify the environment variable is set
-          if [ -z "$NEXT_PUBLIC_API_URL" ]; then
-            echo "Error: NEXT_PUBLIC_API_URL is not set"
-            exit 1
-          fi
-          npm run build
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
-      - name: Google Auth
-        uses: google-github-actions/auth@v2
+      - name: Authenticate to Google Cloud
+        uses: 'google-github-actions/auth@v1'
         with:
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SA_EMAIL }}
+          workload_identity_provider: 'projects/wide-bivouac-453212-v8/locations/global/workloadIdentityPools/github-actions/providers/github-actions-provider'
+          service_account: 'github-actions@wide-bivouac-453212-v8.iam.gserviceaccount.com'
           token_format: 'access_token'
 
       - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
+        uses: 'google-github-actions/setup-gcloud@v1'
 
-      - name: Upload to Cloud Storage
+      - name: Configure CORS
+        run: |
+          gsutil cors set cors.json gs://$FRONTEND_BUCKET
+
+      - name: Upload files
         run: |
           # Clear existing files
           gsutil -m rm -r gs://$FRONTEND_BUCKET/** || true
@@ -61,27 +53,20 @@ jobs:
           gsutil -m cp -r out/* gs://$FRONTEND_BUCKET/
           
           # Set content types and cache control
-          gsutil -m setmeta -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*
-          gsutil -m setmeta -h "Content-Type:text/html" gs://$FRONTEND_BUCKET/*.html
-          gsutil -m setmeta -h "Content-Type:text/css" gs://$FRONTEND_BUCKET/_next/static/css/*.css
-          gsutil -m setmeta -h "Content-Type:application/javascript" gs://$FRONTEND_BUCKET/_next/static/chunks/**/*.js
-          gsutil -m setmeta -h "Content-Type:image/svg+xml" gs://$FRONTEND_BUCKET/*.svg
-          gsutil -m setmeta -h "Content-Type:font/woff2" gs://$FRONTEND_BUCKET/_next/static/media/*.woff2
+          gsutil -m setmeta -h "Content-Type:text/html" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/*.html
+          gsutil -m setmeta -h "Content-Type:text/css" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.css
+          gsutil -m setmeta -h "Content-Type:application/javascript" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.js
+          gsutil -m setmeta -h "Content-Type:image/png" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.png
+          gsutil -m setmeta -h "Content-Type:image/jpeg" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.jpg
+          gsutil -m setmeta -h "Content-Type:image/svg+xml" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.svg
+          gsutil -m setmeta -h "Content-Type:application/font-woff" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.woff
+          gsutil -m setmeta -h "Content-Type:application/font-woff2" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.woff2
           
           # Make bucket publicly readable
           gsutil iam ch allUsers:objectViewer gs://$FRONTEND_BUCKET
-
-      - name: Set website configuration
-        run: |
-          # Set the main page and error page
+          
+          # Configure website
           gsutil web set -m index.html -e 404.html gs://$FRONTEND_BUCKET
           
-          # Set CORS configuration
-          echo '[{"origin": ["*"], "method": ["GET"], "responseHeader": ["Content-Type", "Cache-Control"], "maxAgeSeconds": 3600}]' > cors.json
-          gsutil cors set cors.json gs://$FRONTEND_BUCKET
-          rm cors.json
-          
-          # Create a redirect for the root path
-          echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=/"></head></html>' > redirect.html
-          gsutil cp redirect.html gs://$FRONTEND_BUCKET/index.html
-          rm redirect.html 
+          # Create redirect for root path
+          echo '<html><head><meta http-equiv="refresh" content="0; url=/index.html"></head></html>' | gsutil -h "Content-Type:text/html" cp - gs://$FRONTEND_BUCKET/index.html 

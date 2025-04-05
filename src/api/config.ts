@@ -9,6 +9,14 @@ const api = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    // Add CORS headers for production
+    ...(process.env.NODE_ENV === 'production' ? {
+        withCredentials: false,
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    } : {})
 });
 
 // Add interceptors for error handling
