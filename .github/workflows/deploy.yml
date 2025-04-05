@@ -64,4 +64,11 @@ jobs:
           gsutil iam ch allUsers:objectViewer gs://$FRONTEND_BUCKET
 
       - name: Set website configuration
-        run: gsutil web set -m index.html -e 404.html gs://$FRONTEND_BUCKET 
+        run: |
+          # Set the main page and error page
+          gsutil web set -m index.html -e 404.html gs://$FRONTEND_BUCKET
+          
+          # Set CORS configuration
+          echo '[{"origin": ["*"], "method": ["GET"], "responseHeader": ["Content-Type", "Cache-Control"], "maxAgeSeconds": 3600}]' > cors.json
+          gsutil cors set cors.json gs://$FRONTEND_BUCKET
+          rm cors.json 
