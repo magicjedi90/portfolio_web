@@ -6,7 +6,7 @@ on:
 
 env:
   PROJECT_ID: wide-bivouac-453212-v8
-  REGION: us-central1
+  REGION: us-west1
   SERVICE_NAME: portfolio-web
   DOCKER_REPO: sindbad-portfolio-docker
   SERVICE_ACCOUNT: github-portfolio-deployer@wide-bivouac-453212-v8.iam.gserviceaccount.com
