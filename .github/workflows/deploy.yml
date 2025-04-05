@@ -31,14 +31,14 @@ jobs:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
       - name: Authenticate to Google Cloud
-        uses: 'google-github-actions/auth@v1'
+        uses: google-github-actions/auth@v1
         with:
-          workload_identity_provider: 'projects/wide-bivouac-453212-v8/locations/global/workloadIdentityPools/github-actions/providers/github-actions-provider'
-          service_account: 'github-actions@wide-bivouac-453212-v8.iam.gserviceaccount.com'
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SA_EMAIL }}
           token_format: 'access_token'
 
       - name: Set up Cloud SDK
-        uses: 'google-github-actions/setup-gcloud@v1'
+        uses: google-github-actions/setup-gcloud@v1
 
       - name: Configure CORS
         run: |
