@@ -82,6 +82,6 @@ jobs:
           rm cors.json
           
           # Create a redirect for the root path
-          echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=/sindbad-portfolio-frontend-bucket/"></head></html>' > redirect.html
+          echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=/"></head></html>' > redirect.html
           gsutil cp redirect.html gs://$FRONTEND_BUCKET/index.html
           rm redirect.html 

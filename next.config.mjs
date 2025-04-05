@@ -11,12 +11,25 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL
   },
-  // Add basePath and assetPrefix for Cloud Storage only in production
+  // Production settings
   ...(process.env.NODE_ENV === 'production' ? {
-    basePath: '/sindbad-portfolio-frontend-bucket',
+    // Base path for all routes
+    basePath: '',
+    // Base URL for all assets
     assetPrefix: 'https://storage.googleapis.com/sindbad-portfolio-frontend-bucket',
-    trailingSlash: true
-  } : {})
+    // Ensure trailing slashes
+    trailingSlash: true,
+    // Disable image optimization
+    images: {
+      unoptimized: true,
+      domains: ['storage.googleapis.com']
+    }
+  } : {
+    // Development settings
+    images: {
+      unoptimized: true
+    }
+  })
 };
 
 export default nextConfig; 
