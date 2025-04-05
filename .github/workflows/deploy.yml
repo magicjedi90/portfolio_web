@@ -46,9 +46,25 @@ jobs:
 
       - name: Upload to Cloud Storage
         run: |
+          # Clear existing files
           gsutil -m rm -r gs://$FRONTEND_BUCKET/** || true
+          
+          # Upload all files
           gsutil -m cp -r out/* gs://$FRONTEND_BUCKET/
+          
+          # Set content types and cache control
           gsutil -m setmeta -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*
+          gsutil -m setmeta -h "Content-Type:text/html" gs://$FRONTEND_BUCKET/*.html
+          gsutil -m setmeta -h "Content-Type:text/css" gs://$FRONTEND_BUCKET/**/*.css
+          gsutil -m setmeta -h "Content-Type:application/javascript" gs://$FRONTEND_BUCKET/**/*.js
+          gsutil -m setmeta -h "Content-Type:image/svg+xml" gs://$FRONTEND_BUCKET/**/*.svg
+          gsutil -m setmeta -h "Content-Type:image/png" gs://$FRONTEND_BUCKET/**/*.png
+          gsutil -m setmeta -h "Content-Type:image/jpeg" gs://$FRONTEND_BUCKET/**/*.jpg
+          gsutil -m setmeta -h "Content-Type:image/jpeg" gs://$FRONTEND_BUCKET/**/*.jpeg
+          gsutil -m setmeta -h "Content-Type:font/woff2" gs://$FRONTEND_BUCKET/**/*.woff2
+          
+          # Make bucket publicly readable
+          gsutil iam ch allUsers:objectViewer gs://$FRONTEND_BUCKET
 
       - name: Set website configuration
         run: gsutil web set -m index.html -e 404.html gs://$FRONTEND_BUCKET 
