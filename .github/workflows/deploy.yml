@@ -58,9 +58,6 @@ jobs:
           gsutil -m setmeta -h "Content-Type:text/css" gs://$FRONTEND_BUCKET/**/*.css
           gsutil -m setmeta -h "Content-Type:application/javascript" gs://$FRONTEND_BUCKET/**/*.js
           gsutil -m setmeta -h "Content-Type:image/svg+xml" gs://$FRONTEND_BUCKET/**/*.svg
-          gsutil -m setmeta -h "Content-Type:image/png" gs://$FRONTEND_BUCKET/**/*.png
-          gsutil -m setmeta -h "Content-Type:image/jpeg" gs://$FRONTEND_BUCKET/**/*.jpg
-          gsutil -m setmeta -h "Content-Type:image/jpeg" gs://$FRONTEND_BUCKET/**/*.jpeg
           gsutil -m setmeta -h "Content-Type:font/woff2" gs://$FRONTEND_BUCKET/**/*.woff2
           
           # Make bucket publicly readable
