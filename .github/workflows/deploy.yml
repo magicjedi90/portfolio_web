@@ -47,6 +47,7 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.GCP_SA_EMAIL }}
+          token_format: 'access_token'
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -78,7 +79,4 @@ jobs:
           # Set CORS configuration
           echo '[{"origin": ["*"], "method": ["GET"], "responseHeader": ["Content-Type", "Cache-Control"], "maxAgeSeconds": 3600}]' > cors.json
           gsutil cors set cors.json gs://$FRONTEND_BUCKET
-          rm cors.json
-          
-          # Set default ACL for new objects
-          gsutil defacl set public-read gs://$FRONTEND_BUCKET 
+          rm cors.json 
