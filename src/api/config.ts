@@ -28,6 +28,18 @@ api.interceptors.response.use(
     }
 );
 
+// Add request interceptor to log all requests
+api.interceptors.request.use(
+    (config) => {
+        console.log('Making request to:', config.url);
+        return config;
+    },
+    (error) => {
+        console.error('Request error:', error);
+        return Promise.reject(error);
+    }
+);
+
 // Type assertion to ensure the client returns the correct type
 export const typedApi = api as unknown as {
     get: <T>(url: string) => Promise<T>;

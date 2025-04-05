@@ -9,14 +9,14 @@ const nextConfig = {
   },
   // Production settings
   ...(process.env.NODE_ENV === 'production' ? {
-    // Base URL for all assets
+    // Base URL for routing and navigation
+    basePath: '/sindbad-portfolio-frontend-bucket',
+    // Base URL for static assets
     assetPrefix: 'https://storage.googleapis.com/sindbad-portfolio-frontend-bucket',
     // Ensure trailing slashes
     trailingSlash: true,
     // Use static HTML export
     distDir: 'out',
-    // Handle routing
-    basePath: '',
     // Disable image optimization
     images: {
       unoptimized: true
