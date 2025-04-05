@@ -1,5 +1,5 @@
 # Build stage
-FROM node:20-alpine AS builder
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
@@ -16,36 +16,20 @@ RUN npm cache clean --force && \
 # Copy the rest of the application
 COPY . .
 
-# Build the application with a placeholder API URL
-# This will be overridden by runtime environment variables
-ENV NEXT_PUBLIC_API_URL=http://localhost:8080
+# Build the application
 RUN npm run build
 
 # Production stage
-FROM node:20-alpine AS runner
+FROM nginx:alpine
 
-WORKDIR /app
+# Copy built files from builder
+COPY --from=builder /app/out /usr/share/nginx/html
 
-# Don't run production as root
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-USER nextjs
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Set environment to production
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+# Expose port 80
+EXPOSE 80
 
-# Copy necessary files from builder
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-# Expose the port the app runs on
-EXPOSE 3000
-
-# Use port 3000 for local development
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
-
-# Start the application
-CMD ["node", "server.js"] 
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"] 
