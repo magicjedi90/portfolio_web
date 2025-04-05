@@ -55,10 +55,10 @@ jobs:
           # Set content types and cache control
           gsutil -m setmeta -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*
           gsutil -m setmeta -h "Content-Type:text/html" gs://$FRONTEND_BUCKET/*.html
-          gsutil -m setmeta -h "Content-Type:text/css" gs://$FRONTEND_BUCKET/**/*.css
-          gsutil -m setmeta -h "Content-Type:application/javascript" gs://$FRONTEND_BUCKET/**/*.js
-          gsutil -m setmeta -h "Content-Type:image/svg+xml" gs://$FRONTEND_BUCKET/**/*.svg
-          gsutil -m setmeta -h "Content-Type:font/woff2" gs://$FRONTEND_BUCKET/**/*.woff2
+          gsutil -m setmeta -h "Content-Type:text/css" gs://$FRONTEND_BUCKET/_next/static/css/*.css
+          gsutil -m setmeta -h "Content-Type:application/javascript" gs://$FRONTEND_BUCKET/_next/static/chunks/**/*.js
+          gsutil -m setmeta -h "Content-Type:image/svg+xml" gs://$FRONTEND_BUCKET/*.svg
+          gsutil -m setmeta -h "Content-Type:font/woff2" gs://$FRONTEND_BUCKET/_next/static/media/*.woff2
           
           # Make bucket publicly readable
           gsutil iam ch allUsers:objectViewer gs://$FRONTEND_BUCKET
