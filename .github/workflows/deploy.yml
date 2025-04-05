@@ -72,7 +72,4 @@ jobs:
           gsutil iam ch allUsers:objectViewer gs://$FRONTEND_BUCKET
           
           # Configure website
-          gsutil web set -m index.html -e 404.html gs://$FRONTEND_BUCKET
-          
-          # Create a proper index.html redirect
-          echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=https://storage.googleapis.com/sindbad-portfolio-frontend-bucket/index.html"></head></html>' | gsutil -h "Content-Type:text/html" cp - gs://$FRONTEND_BUCKET/index.html 
+          gsutil web set -m index.html -e 404.html gs://$FRONTEND_BUCKET 
