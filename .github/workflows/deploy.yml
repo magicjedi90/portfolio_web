@@ -52,15 +52,21 @@ jobs:
           # Upload all files
           gsutil -m cp -r out/* gs://$FRONTEND_BUCKET/
           
-          # Set content types and cache control
-          gsutil -m setmeta -h "Content-Type:text/html" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/*.html
-          gsutil -m setmeta -h "Content-Type:text/css" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.css
-          gsutil -m setmeta -h "Content-Type:application/javascript" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.js
-          gsutil -m setmeta -h "Content-Type:image/png" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.png
-          gsutil -m setmeta -h "Content-Type:image/jpeg" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.jpg
-          gsutil -m setmeta -h "Content-Type:image/svg+xml" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.svg
-          gsutil -m setmeta -h "Content-Type:application/font-woff" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.woff
-          gsutil -m setmeta -h "Content-Type:application/font-woff2" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.woff2
+          # Set content types and cache control for HTML files
+          gsutil -m setmeta -h "Content-Type:text/html" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/*.html || true
+          
+          # Set content types and cache control for CSS files (if they exist)
+          gsutil -m setmeta -h "Content-Type:text/css" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.css || true
+          
+          # Set content types and cache control for JS files (if they exist)
+          gsutil -m setmeta -h "Content-Type:application/javascript" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.js || true
+          
+          # Set content types and cache control for SVG files (if they exist)
+          gsutil -m setmeta -h "Content-Type:image/svg+xml" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.svg || true
+          
+          # Set content types and cache control for font files (if they exist)
+          gsutil -m setmeta -h "Content-Type:application/font-woff" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.woff || true
+          gsutil -m setmeta -h "Content-Type:application/font-woff2" -h "Cache-Control:public, max-age=3600" gs://$FRONTEND_BUCKET/**/*.woff2 || true
           
           # Make bucket publicly readable
           gsutil iam ch allUsers:objectViewer gs://$FRONTEND_BUCKET
