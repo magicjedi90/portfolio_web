@@ -17,7 +17,7 @@ export default function Home() {
             {/* Hero Section */}
             <section className={styles[bem.elem('hero')]}>
                 <div className={styles[bem.elem('hero-content')]}>
-                    <h1 className={styles[bem.elem('hero-title')]}>Jesse McIntosh</h1>
+                    <h1 className={styles[bem.elem('hero-title')]}>Jesse Michael Sindbad McIntosh</h1>
                     <p className={styles[bem.elem('hero-subtitle')]}>Principal Software Engineer</p>
                     <p className={styles[bem.elem('hero-description')]}>
                         Specializing in system architecture, technical leadership, and full-stack development
