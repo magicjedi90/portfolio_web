@@ -33,7 +33,14 @@ jobs:
       - name: Build
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.PROD_API_URL }}
-        run: npm run build
+        run: |
+          echo "Building with API URL: $NEXT_PUBLIC_API_URL"
+          # Verify the environment variable is set
+          if [ -z "$NEXT_PUBLIC_API_URL" ]; then
+            echo "Error: NEXT_PUBLIC_API_URL is not set"
+            exit 1
+          fi
+          npm run build
 
       - name: Google Auth
         uses: google-github-actions/auth@v2
@@ -71,4 +78,7 @@ jobs:
           # Set CORS configuration
           echo '[{"origin": ["*"], "method": ["GET"], "responseHeader": ["Content-Type", "Cache-Control"], "maxAgeSeconds": 3600}]' > cors.json
           gsutil cors set cors.json gs://$FRONTEND_BUCKET
-          rm cors.json 
+          rm cors.json
+          
+          # Set default ACL for new objects
+          gsutil defacl set public-read gs://$FRONTEND_BUCKET 

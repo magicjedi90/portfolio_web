@@ -3,18 +3,22 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   output: 'export',
-  images: {
-    unoptimized: true
-  },
   // Ensure environment variables are handled correctly
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL
   },
-  // Add basePath and assetPrefix for Cloud Storage
-  basePath: '',
-  assetPrefix: 'https://storage.googleapis.com/sindbad-portfolio-frontend-bucket',
-  // Ensure trailing slashes for static export
-  trailingSlash: true
+  // Add debugging for env variables
+  webpack: (config) => {
+    console.log('NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+    return config;
+  },
+  // Remove the production-specific settings and use a simpler approach
+  trailingSlash: true,
+  // Disable image optimization for static export
+  images: {
+    unoptimized: true,
+    domains: ['storage.googleapis.com']
+  }
 };
 
 export default nextConfig; 
