@@ -5,10 +5,11 @@ on:
     branches: [ main ]
 
 env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  PROJECT_ID: wide-bivouac-453212-v8
   REGION: us-central1
   SERVICE_NAME: portfolio-web
   DOCKER_REPO: sindbad-portfolio-docker
+  SERVICE_ACCOUNT: github-portfolio-deployer@wide-bivouac-453212-v8.iam.gserviceaccount.com
 
 jobs:
   deploy:
@@ -25,7 +26,7 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SA_EMAIL }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -45,5 +46,6 @@ jobs:
             --image us-west1-docker.pkg.dev/$PROJECT_ID/$DOCKER_REPO/$SERVICE_NAME:${{ github.sha }} \
             --platform managed \
             --allow-unauthenticated \
+            --service-account $SERVICE_ACCOUNT \
             --set-env-vars "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" \
             --min-instances=1 
