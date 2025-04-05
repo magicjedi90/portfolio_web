@@ -52,16 +52,4 @@ jobs:
           gsutil iam ch allUsers:objectViewer gs://$FRONTEND_BUCKET
           
           # Configure website
-          gsutil web set -m index.html -e 404.html gs://$FRONTEND_BUCKET
-          
-          # Create redirect for root path
-          echo '<html><head><meta http-equiv="refresh" content="0;url=/"></head></html>' > index.html
-          gsutil cp index.html gs://$FRONTEND_BUCKET/
-          
-          # Create redirect for experience path
-          echo '<html><head><meta http-equiv="refresh" content="0;url=/experience/"></head></html>' > experience.html
-          gsutil cp experience.html gs://$FRONTEND_BUCKET/experience
-          
-          # Create redirect for projects path
-          echo '<html><head><meta http-equiv="refresh" content="0;url=/projects/"></head></html>' > projects.html
-          gsutil cp projects.html gs://$FRONTEND_BUCKET/projects 
+          gsutil web set -m index.html -e 404.html gs://$FRONTEND_BUCKET 
