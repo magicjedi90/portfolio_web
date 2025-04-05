@@ -9,8 +9,6 @@ const nextConfig = {
   },
   // Production settings
   ...(process.env.NODE_ENV === 'production' ? {
-    // Base URL for routing and navigation
-    basePath: '/sindbad-portfolio-frontend-bucket',
     // Base URL for static assets
     assetPrefix: 'https://storage.googleapis.com/sindbad-portfolio-frontend-bucket',
     // Ensure trailing slashes
