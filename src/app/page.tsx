@@ -18,7 +18,7 @@ export default function Home() {
             <section className={styles[bem.elem('hero')]}>
                 <div className={styles[bem.elem('hero-content')]}>
                     <h1 className={styles[bem.elem('hero-title')]}>Jesse Michael Sindbad McIntosh</h1>
-                    <p className={styles[bem.elem('hero-subtitle')]}>Principal Software Engineer</p>
+                    <p className={styles[bem.elem('hero-subtitle')]}>Staff Software Engineer</p>
                     <p className={styles[bem.elem('hero-description')]}>
                         Specializing in system architecture, technical leadership, and full-stack development
                     </p>
@@ -30,7 +30,7 @@ export default function Home() {
                 <div className={styles[bem.elem('about-content')]}>
                     <h2 className={styles[bem.elem('section-title')]}>About Me</h2>
                     <p className={styles[bem.elem('about-text')]}>
-                        I am a Principal Software Engineer with extensive experience in building scalable,
+                        I am a Staff Software Engineer with extensive experience in building scalable,
                         maintainable, and high-performance applications. My expertise lies in system architecture,
                         technical leadership, and full-stack development.
                     </p>
